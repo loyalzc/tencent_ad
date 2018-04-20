@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 @author: Infaraway
-@time: 2018/4/17 17:49
+@time: 2018/4/18 17:49
 @Function:
 """
 
@@ -9,51 +9,19 @@ from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 import numpy as np
 import pandas as pd
 import lightgbm as lgb
+from gensim.models.word2vec import Word2Vec
 
 
-def base_marriage(x):
-    x = str(x)
-    if x == '5 13 10':
-        return 1
-    elif x == '15 10' or x == '8' or x == '6 13 10' or x == '13 15 10' or x == '13 10 9' or x == '2 13 10':
-        return 2
-    elif x == '12 13 10' or x == '3':
-        return 3
+def base_word2vec(x, model, size):
+    vec = np.zeros(size)
+    x = [item for item in x if model.wv.__contains__(item)]
+
+    for item in x:
+        vec += model.wv[item]
+    if len(x) == 0:
+        return vec
     else:
-        return 0
-
-
-def base_education(x):
-    x = int(x)
-    if x == 0 or x == 1 or x == 2 or x == 3:
-        return 1
-    else:
-        return 0
-
-
-def base_age(x):
-    x = int(x)
-    if x == 0 or x == 1 or x == 3:
-        return 1
-    elif x == 2:
-        return 2
-    else:
-        return 0
-
-
-def base_ct(x):
-    x_list = x.split(' ')
-    x_list.sort()
-    return ''.join(x_list)
-
-
-def base_os(x):
-    x = str(x)
-
-    if x == 0 or x == 1:
-        return 1
-    else:
-        return 0
+        return vec / len(x)
 
 
 def base_process(data):
@@ -63,11 +31,6 @@ def base_process(data):
 
     vector_feature = ['appIdAction', 'appIdInstall', 'interest1', 'interest2', 'interest3', 'interest4', 'interest5',
                       'kw1', 'kw2', 'kw3', 'topic1', 'topic2', 'topic3']
-
-    data['age_0'] = data['age'].apply(base_age)
-    data['education_0'] = data['education'].apply(base_education)
-    data['os_0'] = data['os'].apply(base_os)
-    data['marriageStatus_0'] = data['marriageStatus'].apply(base_marriage)
 
     lbc = LabelEncoder()
     for feature in one_hot_feature:
@@ -79,12 +42,22 @@ def base_process(data):
 
     for feature in vector_feature:
         print("this is feature:", feature)
-        data['len_' + feature] = data[feature].map(lambda x: len(str(x).split(' ')))
+
+        data[feature] = data[feature].apply(lambda x: str(x).split(' '))
+        model = Word2Vec(data[feature], size=10, min_count=1, iter=100, window=10)
+        data_vec = []
+        for row in data[feature]:
+            data_vec.append(base_word2vec(row, model, size=10))
+        column_names = []
+        for i in range(10):
+            column_names.append(feature + str(i))
+        data_vec = pd.DataFrame(data_vec, columns=column_names)
+        data = pd.concat([data, data_vec], axis=1)
         del data[feature]
     return data
 
 
-def base_model(train, test, best_iter=300):
+def base_model(train, test, best_iter=100):
     col = [c for c in train if c not in ['uid', 'aid', 'label']]
     X = train[col]
     y = train['label'].values
@@ -94,7 +67,7 @@ def base_model(train, test, best_iter=300):
         # metric='binary_error',
         num_leaves=40,
         max_depth=6,
-        learning_rate=0.01,
+        learning_rate=0.1,
         seed=2018,
         colsample_bytree=0.8,
         # min_child_samples=8,
@@ -111,23 +84,18 @@ def base_model(train, test, best_iter=300):
     result.to_csv('submission.csv', index=False)
 
 
-def do_exp2():
+def do_exp():
     print('-------------------- read data  -------------------------------------')
-    #
+    # merge之后的data
     data = pd.read_csv('input/testData.csv')
-    data.fillna('-1')
-
+    # 需要大量的时间，建议按feature多线程
     data = base_process(data)
-
     data.to_csv('input/data_0420.csv', index=False)
     print('-------------------- train and test data ----------------------------')
-    train = data[data.label != -1]
-    test2 = data[data.label == -1]
-    base_model(train, test2, best_iter=1000)
-
+    train = data[data.label.notnull()]
+    test = data[data.label.isnull()]
+    base_model(train, test, best_iter=1000)
 
 if __name__ == '__main__':
-    # do_exp()
-    do_exp2()
-
+    do_exp()
     print('end....')

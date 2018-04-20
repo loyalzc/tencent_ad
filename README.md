@@ -1,12 +1,14 @@
 # tencent_ad
 
-### 腾讯社交广告算法大赛 Baseline及基本特征汇总
+### 腾讯社交广告算法大赛 Baseline
 
 大佬已经做出来了高Baseline的代码：https://github.com/YouChouNoBB/2018-tencent-ad-competition-baseline
 
-无奈渣渣电脑基本跑不出来大神的结果，所以只好先搞搞基本特征~
+无奈渣渣电脑基本跑不出来大神的结果，所以只好默默尝试别的出路
 
-目前线上大概0.7左右
+考虑interest kw topic此类特征太多，one-hot直接维数爆掉，所以采用了word2vec方法降维；没有调参的情况下基本可以达到one-hot的得分
+
+#### 另附interest kw topic各个维度的长度，以便选择word2vec的size
 
 #### 用户特征
 
