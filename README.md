@@ -45,3 +45,113 @@
   75%     5.000000e+00  1.000000e+00  5.000000e+00  5.000000e+00  1.000000e+00  
   max     5.000000e+00  5.000000e+00  5.000000e+00  5.000000e+00  5.000000e+00  
 
+#### 多值特征的统计：
+
+    word_vec:  count top_20%
+
+    this is feature: appIdAction
+    word_vec:  6215 1243
+    this is feature: appIdInstall
+    word_vec:  64856 12971
+    this is feature: interest1
+    word_vec:  123 24
+    this is feature: interest2
+    word_vec:  81 16
+    this is feature: interest3
+    word_vec:  11 2
+    this is feature: interest4
+    word_vec:  11 2
+    this is feature: interest5
+    word_vec:  137 27
+    this is feature: kw1
+    word_vec:  259909 51981
+    this is feature: kw2
+    word_vec:  49197 9839
+    this is feature: kw3
+    word_vec:  11922 2384
+    this is feature: topic1
+    word_vec:  10001 2000
+    this is feature: topic2
+    word_vec:  9980 1996
+    this is feature: topic3
+    word_vec:  5873 1174
+
+#### 选择top20%以后的统计描述信息
+
+    this is feature: interest1
+    word_vec:  123 24
+    count    1.142004e+07
+    mean     8.807826e+00
+    std      5.239412e+00
+    min      1.000000e+00
+    25%      4.000000e+00
+    50%      9.000000e+00
+    75%      1.300000e+01
+    max      2.400000e+01
+    Name: interest1, dtype: float64
+    this is feature: interest2
+    word_vec:  81 16
+    count    1.142004e+07
+    mean     2.676273e+00
+    std      2.391842e+00
+    min      1.000000e+00
+    25%      1.000000e+00
+    50%      2.000000e+00
+    75%      4.000000e+00
+    max      1.500000e+01
+    Name: interest2, dtype: float64
+    this is feature: interest5
+    word_vec:  137 27
+    count    1.142004e+07
+    mean     9.560934e+00
+    std      6.553343e+00
+    min      1.000000e+00
+    25%      1.000000e+00
+    50%      1.000000e+01
+    75%      1.500000e+01
+    max      2.600000e+01
+    Name: interest5, dtype: float64
+    this is feature: kw1
+    word_vec:  263311 52662
+    count    1.142004e+07
+    mean     4.227658e+00
+    std      1.328209e+00
+    min      1.000000e+00
+    25%      4.000000e+00
+    50%      5.000000e+00
+    75%      5.000000e+00
+    max      5.000000e+00
+    Name: kw1, dtype: float64
+    this is feature: kw2
+    word_vec:  49779 9955
+    count    1.142004e+07
+    mean     4.680158e+00
+    std      9.268412e-01
+    min      1.000000e+00
+    25%      5.000000e+00
+    50%      5.000000e+00
+    75%      5.000000e+00
+    max      5.000000e+00
+    Name: kw2, dtype: float64
+    this is feature: topic1
+    word_vec:  10001 2000
+    count    1.142004e+07
+    mean     3.636819e+00
+    std      1.328687e+00
+    min      1.000000e+00
+    25%      3.000000e+00
+    50%      4.000000e+00
+    75%      5.000000e+00
+    max      5.000000e+00
+    Name: topic1, dtype: float64
+    this is feature: topic2
+    word_vec:  9983 1996
+    count    1.142004e+07
+    mean     3.840774e+00
+    std      1.245283e+00
+    min      1.000000e+00
+    25%      3.000000e+00
+    50%      4.000000e+00
+    75%      5.000000e+00
+    max      5.000000e+00
+    Name: topic2, dtype: float64

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 @author: Infaraway
-@time: 2018/4/18 17:49
+@time: 2018/4/20 17:49
 @Function:
 """
 
@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import lightgbm as lgb
 from gensim.models.word2vec import Word2Vec
+import collections
 
 
 def base_word2vec(x, model, size):
@@ -22,6 +23,26 @@ def base_word2vec(x, model, size):
         return vec
     else:
         return vec / len(x)
+
+
+def select_topk(data):
+    """
+    选择频率最高的 k 个word 此处为前20%
+    :param data:
+    :return:
+    """
+    word_list = []
+    for words in data:
+        word_list += words
+    result = collections.Counter(word_list)
+    size = len(result)
+    result = result.most_common(int(size * 0.2))
+
+    word_dict = {}
+    for re in result:
+        word_dict[re[0]] = 1
+    print('word_vec: ', size, len(result))
+    return word_dict
 
 
 def base_process(data):
@@ -42,7 +63,12 @@ def base_process(data):
 
     for feature in vector_feature:
         print("this is feature:", feature)
+
         data[feature] = data[feature].apply(lambda x: str(x).split(' '))
+        word_dict = select_topk(data[feature])
+        data[feature] = data[feature].apply(lambda x: ' '.join(
+            [word for word in x if word_dict.__contains__(word)]))
+
         model = Word2Vec(data[feature], size=10, min_count=1, iter=5, window=2)
         data_vec = []
         for row in data[feature]:
@@ -93,7 +119,6 @@ def do_exp():
     train = data[data.label.notnull()]
     test = data[data.label.isnull()]
     base_model(train, test, best_iter=1000)
-
 
 if __name__ == '__main__':
     do_exp()
