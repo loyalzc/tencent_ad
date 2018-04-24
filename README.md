@@ -8,6 +8,9 @@
 
 考虑interest kw topic此类特征太多，one-hot直接维数爆掉，所以采用了word2vec方法降维；没有调参的情况下基本可以达到one-hot的得分
 
+- baseline :
+- baseline_topk: 选择在interest kw topic等特征中出现频率topk的值，删除剩余的低频值
+
 #### 另附interest kw topic各个维度的长度，以便选择word2vec的size
 
 #### 用户特征
