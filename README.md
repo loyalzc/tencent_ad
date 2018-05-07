@@ -4,8 +4,6 @@
 
 大佬已经做出来了高Baseline的代码：https://github.com/YouChouNoBB/2018-tencent-ad-competition-baseline
 
-无奈渣渣电脑基本跑不出来大神的结果，所以只好默默尝试别的出路
-
 考虑interest kw topic此类特征太多，one-hot直接维数爆掉，所以采用了word2vec方法降维；没有调参的情况下基本可以达到one-hot的得分
 
 - baseline :
